@@ -19,7 +19,7 @@ int main(void)
 		{
 			/*clear output buffer and diplay prompt*/
 			fflush(stdout);
-			write(STDOUT_FILENO, prompt, strlen(proompt));
+			write(STDOUT_FILENO, prompt, strlen(prompt));
 		}
 		line_got = getline(&lineptr, &n, stdin);
 		if (line_got == -1)
