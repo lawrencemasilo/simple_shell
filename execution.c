@@ -45,7 +45,7 @@ void _tokenize_and_execute(char *lineptr, size_t n)
 		}
 		argv[i] = NULL;
 		free(str_copy);
-		/*placeholder for the execute()*/
+		execute();
 	}
 	else
 		wait(NULL);
@@ -91,4 +91,35 @@ void _execute(char **argv, int size)
 	{
 		wait(NULL);
 	}
+}
+
+/**
+ * _path_name - provides path for input commands
+ * @argv: argument vector
+ * Return: path name
+ */
+char *_path_name(char **argv)
+{
+	int i = 0, j = 0;
+	char *part_path = "/bin/";
+	char *complete_path = NULL;
+	char *command = strdup(argv[0]);
+
+	complete_path = malloc((sizeof(command) + 1) + (sizeof(part_path) + 1));
+	if (complete_path == NULL)
+	{
+		printf("memory allocation failed");
+	}
+	while (part_path[i] != '\0')
+	{
+		complete_path[i] = part_path[i];
+		i++;
+	}
+	while (command[j] != '\0')
+	{
+		complete_path[i] = command[j];
+		i++;
+		j++;
+	}
+	return (complete_path);
 }
