@@ -14,7 +14,7 @@ int main(void)
 	char *lineptr = NULL;
 
 	lineptr = malloc(sizeof(char *));
-	while(1)
+	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 		{
@@ -31,9 +31,9 @@ int main(void)
 		}
 		if (line_got != -1)
 		{
-			_tokenize_and_execute(lineptr, n);
+			_tokenise_and_execute(lineptr, n);
 		}
 	}
 	free(lineptr);
-	return(0);
+	return (0);
 }
