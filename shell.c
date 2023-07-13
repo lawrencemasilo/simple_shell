@@ -11,8 +11,9 @@ int main(void)
 	char *prompt = ";) ";
 	int line_got;
 	size_t n = 0;
-	char *lineptr;
+	char *lineptr = NULL;
 
+	lineptr = malloc(sizeof(char *));
 	while(1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
@@ -21,9 +22,11 @@ int main(void)
 			fflush(stdout);
 			write(STDOUT_FILENO, prompt, strlen(proompt));
 		}
+		/*getline will resize lineptr to acommodate the linne gotten*/
 		line_got = getline(&lineptr, &n, stdin);
 		if (line_got == -1)
 		{
+			free(lineptr);
 			exit(0);
 		}
 		if (line_got != -1)
@@ -31,6 +34,5 @@ int main(void)
 			/*tokenize and execute function*/
 		}
 	}
-	/*free memory if necessary*/
 	return(0);
 }
