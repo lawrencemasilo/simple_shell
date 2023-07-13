@@ -4,6 +4,7 @@
  * _tokenize_and_execute - tokenise lineptr and pass arguments for execution
  * @lineptr: line from the stdin
  * @n: size of lineptr
+ * Return: Nothing
  */
 
 void _tokenize_and_execute(char *lineptr, size_t n)
@@ -48,4 +49,46 @@ void _tokenize_and_execute(char *lineptr, size_t n)
 	}
 	else
 		wait(NULL);
+}
+
+/**
+ * _execute - executes input command
+ * @argv: argument vector
+ * @size: argument count
+ * Return: Nothing
+ */
+void _execute(char **argv, int size)
+{
+	char *path = NULL;
+	int execute;
+	pid_t pid;
+	(void) size;
+
+	if (*argv[0] == '/')
+	{
+		path = argv[0];
+	}
+	else
+	{
+		path = _path_name(argv);
+	}
+	if (path == NULL)
+	{
+		printf("path is empty\n");
+	}
+	pid = fork();
+	if (pid == -1)
+		perror("fork");
+	if (pid == 0)
+	{
+		execute = execve(path, argv, environ);
+		if (execute == -1)
+		{
+			perror("execute");
+		}
+	}
+	else
+	{
+		wait(NULL);
+	}
 }
