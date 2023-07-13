@@ -45,7 +45,7 @@ void _tokenize_and_execute(char *lineptr, size_t n)
 		}
 		argv[i] = NULL;
 		free(str_copy);
-		execute();
+		_execute(argv, argc);
 	}
 	else
 		wait(NULL);
