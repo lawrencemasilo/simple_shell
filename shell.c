@@ -20,7 +20,7 @@ int main(void)
 		{
 			/*clear output buffer and diplay prompt*/
 			fflush(stdout);
-			write(STDOUT_FILENO, prompt, strlen(proompt));
+			write(STDOUT_FILENO, prompt, strlen(prompt));
 		}
 		/*getline will resize lineptr to acommodate the linne gotten*/
 		line_got = getline(&lineptr, &n, stdin);
