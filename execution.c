@@ -7,7 +7,7 @@
  * Return: Nothing
  */
 
-void _tokenize_and_execute(char *lineptr, size_t n)
+void _tokenise_and_execute(char *lineptr, size_t n)
 {
 	char **argv = NULL;
 	int argc = 0, i = 0;
@@ -44,7 +44,7 @@ void _tokenize_and_execute(char *lineptr, size_t n)
 			token2 = strtok(NULL, delim);
 		}
 		argv[i] = NULL;
-		free(str_copy);
+		/*free(str_copy);*/
 		_execute(argv, argc);
 	}
 	else
@@ -74,7 +74,7 @@ void _execute(char **argv, int size)
 	}
 	if (path == NULL)
 	{
-		printf("path is empty\n");
+		perror("path is empty\n");
 	}
 	pid = fork();
 	if (pid == -1)
@@ -108,7 +108,7 @@ char *_path_name(char **argv)
 	complete_path = malloc((sizeof(command) + 1) + (sizeof(part_path) + 1));
 	if (complete_path == NULL)
 	{
-		printf("memory allocation failed");
+		perror("memory allocation failed");
 	}
 	while (part_path[i] != '\0')
 	{
