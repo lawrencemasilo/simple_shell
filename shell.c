@@ -31,8 +31,9 @@ int main(void)
 		}
 		if (line_got != -1)
 		{
-			/*tokenize and execute function*/
+			_tokenize_and_execute(lineptr, n);
 		}
 	}
+	free(lineptr);
 	return(0);
 }
