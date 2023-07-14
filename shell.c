@@ -31,6 +31,11 @@ int main(void)
 		}
 		if (line_got != -1)
 		{
+			if (strcmp(lineptr, "exit\n") == 0)
+			{
+				free(lineptr);
+				exit(0);
+			}
 			_tokenise_and_execute(lineptr, n);
 		}
 	}
