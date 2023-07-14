@@ -15,14 +15,16 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 
 	pid_t pid = fork();
 
+	(void) n;
+
 	if (pid == -1)
 	{
 		perror("Fork failed");
 	}
 	else if (pid == 0)
 	{
-		str_copy = malloc(sizeof(char *) * n);
-		str_copy = strcpy(str_copy, lineptr);
+		str_copy = malloc(sizeof(char *) * (_strlen(lineptr)));
+		str_copy = _strcpy(str_copy, lineptr);
 		token1 = strtok(lineptr, delim);
 		if (token1 != NULL)
 		{
@@ -46,6 +48,7 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 		argv[i] = NULL;
 		/*free(str_copy);*/
 		_execute(argv, argc);
+		/*free(str_copy);*/
 	}
 	else
 		wait(NULL);

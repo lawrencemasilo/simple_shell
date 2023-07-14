@@ -11,5 +11,7 @@ extern char **environ;
 void _tokenise_and_execute(char *lineptr, size_t n);
 void _execute(char **argv, int size);
 char *_path_name(char **argv);
+char *_strcpy(char *dest, char *src);
+ssize_t _strlen(const char *str);
 
 #endif
