@@ -27,30 +27,71 @@ char *_strcpy(char *dest, char *src)
 }
 
 /**
- * _strdup - returns pointer to new string which is a copy of str
- * @str: string to be duplicated
- * Return: pointer to duplicate string on success, NULL on failure
+ * _strchr - locates a character in a string
+ * @s: string in which char c will be located
+ * @c: character to be located
+ * Return: pointer to s or NULL if c is not found
  */
-char *_strdup(char *str)
+char *_strchr(char *s, char c)
 {
-	int i = 0, j = 0;
-	char *ptr;
+	char *ptr = s;
 
-	if (str == NULL)
-		return (NULL);
-	while (str[j] != '\0')
+	while (*ptr != '\0')
 	{
-		j++;
+		if (*ptr == c)
+		{
+			return (ptr);
+		}
+		ptr++;
 	}
-	ptr = malloc(j + 1 * sizeof(char));
-	if (ptr == NULL)
-		return (NULL);
-	while (i < j)
+	if (*ptr == c)
 	{
-		ptr[i] = str[i];
-		i++;
+		return (ptr);
 	}
-	return (ptr);
+	return (0);
 }
 
+/**
+ * _strtok -
+ * @str:
+ * @delim:
+ * Return:
+ */
+char *_strtok(char *str, const char *delim)
+{
+	/* static variable to keep track of the position */
+	static char *next_token = NULL;
+	char *token_start;
 
+	if (str == NULL)
+	{
+		str = next_token;
+	}
+	/* skip leading delimiters */
+	while (*str != '\0' && _strchr(delim, *str) != NULL)
+	{
+		str++;
+	}
+	/* on end of string, return NULL */
+	if (*str == '\0')
+	{
+		return (NULL);
+	}
+	/* find end of current token */
+	*token_start = str;
+	while (*str != '\0' && _strchr(delim, *str) == NULL)
+	{
+		str++;
+	}
+	/* if end of string, set next_token to NULL */
+	if (*str == '\0')
+	{
+		next_token = NULL;
+	}
+	else /* replace delim with null terminator */
+	{
+		*str = '\0';
+		next_token = str + 1;
+	}
+	return (token_start);
+}
