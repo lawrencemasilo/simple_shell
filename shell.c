@@ -26,7 +26,6 @@ int main(void)
 		line_got = getline(&lineptr, &n, stdin);
 		if (line_got == -1)
 		{
-			write(STDOUT_FILENO, "logout\n", 7);
 			free(lineptr);
 			exit(0);
 		}
