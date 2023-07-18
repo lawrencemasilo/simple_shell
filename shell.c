@@ -26,6 +26,7 @@ int main(void)
 		line_got = getline(&lineptr, &n, stdin);
 		if (line_got == -1)
 		{
+			write(STDOUT_FILENO, "logout\n", 7);
 			free(lineptr);
 			exit(0);
 		}
@@ -33,8 +34,9 @@ int main(void)
 		{
 			if (strcmp(lineptr, "exit\n") == 0)
 			{
+				write(STDOUT_FILENO, "Exiting the shell...\n", 21);
 				free(lineptr);
-				exit(0);
+				exit(EXIT_SUCCESS);
 			}
 			_tokenise_and_execute(lineptr, n);
 		}

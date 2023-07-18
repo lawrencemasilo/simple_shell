@@ -82,7 +82,7 @@ void _execute(char **argv, int size)
 	pid = fork();
 	if (pid == -1)
 		perror("fork");
-	if (pid == 0)
+	if (kill(pid, SIGINT) == 0)
 	{
 		execute = execve(path, argv, environ);
 		if (execute == -1)
