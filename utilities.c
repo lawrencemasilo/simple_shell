@@ -52,12 +52,12 @@ char *_strchr(char *s, char c)
 }
 
 /**
- * _strtok -
- * @str:
- * @delim:
- * Return:
+ * _strtok - tokenise string by splitting it into smaller parts
+ * @str: string to tokenise
+ * @delim: delimiting character
+ * Return: pointer to next token in str
  */
-char *_strtok(char *str, const char *delim)
+char *_strtok(char *str, char *delim)
 {
 	/* static variable to keep track of the position */
 	static char *next_token = NULL;
@@ -78,7 +78,7 @@ char *_strtok(char *str, const char *delim)
 		return (NULL);
 	}
 	/* find end of current token */
-	*token_start = str;
+	token_start = str;
 	while (*str != '\0' && _strchr(delim, *str) == NULL)
 	{
 		str++;

@@ -14,6 +14,6 @@ char *_path_name(char **argv);
 char *_strcpy(char *dest, char *src);
 ssize_t _strlen(const char *str);
 char *_strchr(char *s, char c);
-char *_strtok(char *str, const char *delim);
+char *_strtok(char *str, char *delim);
 
 #endif
