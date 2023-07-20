@@ -95,6 +95,7 @@ char *_strtok(char *str, char *delim)
 	}
 	return (token_start);
 }
+
 /**
  * _atoi - converts character string to int
  * @str: string to be converted to integer
@@ -132,4 +133,52 @@ int _atoi(const char *str)
 		i++;
 	}
 	return (sign * result);
+}
+
+/**
+ * _cd - changes directories
+ * @path - address of directory to change to
+ * @argc - number of arguments
+ * Return: Nothing
+ */
+void _cd(const char *path, int argc)
+{
+	char *home_path = getenv("HOME");
+	char current_directory[1024];
+	int previous, cd_i;
+	char *cwd;
+
+	/*cd with no arguments changes dir to home/root dir*/
+	if (argc == 1)
+	{
+		chdir(home_path);
+	}
+	if (path != NULL)
+	{
+		/* *
+		 * checks if command cd with argument '-',
+		 * then handles it by changing to the previous dir
+		 */
+		if (strcmp(path, "-") == 0)
+		{
+			previous = chdir(getenv("OLDPWD"));
+			if (previous == -1)
+			{
+				perror("chdir");
+			}
+		}
+		else /*change directory using path*/
+		{
+			cd_i = chdir(path);
+			if (cd_i == -1)
+			{
+				perror("chdir");
+			}
+		}
+	}
+	cwd = getcwd(current_directory, sizeof(current_directory));
+	if (cwd != NULL)
+	{
+		setenv("PWD", current_directory, 1);
+	}
 }
