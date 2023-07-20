@@ -1,12 +1,11 @@
 #include "shell.h"
 
 /**
- * _tokenize_and_execute - tokenise lineptr and pass arguments for execution
+ * _tokenise_and_execute - tokenise lineptr and pass arguments for execution
  * @lineptr: line from the stdin
  * @n: size of lineptr
  * Return: Nothing
  */
-
 void _tokenise_and_execute(char *lineptr, size_t n)
 {
 	char **argv = NULL;
@@ -18,9 +17,7 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 	(void) n;
 
 	if (pid == -1)
-	{
 		perror("Fork failed");
-	}
 	else if (pid == 0)
 	{
 		str_copy = malloc(sizeof(char *) * (_strlen(lineptr)));
@@ -46,9 +43,8 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 			token2 = strtok(NULL, delim);
 		}
 		argv[i] = NULL;
-		/*free(str_copy);*/
 		_execute(argv, argc);
-		/*free(str_copy);*/
+		free(str_copy);
 	}
 	else
 		wait(NULL);
@@ -65,29 +61,35 @@ void _execute(char **argv, int size)
 	char *path = NULL;
 	int execute;
 	pid_t pid;
-	(void) size;
 
-	if (*argv[0] == '/')
+	if (strcmp(argv[0], "cd") == 0)
 	{
-		path = argv[0];
+		_cd(argv[1], size);
 	}
-	else
+	else if (strcmp(argv[0], "cd") != 0)
 	{
-		path = _path_name(argv);
-	}
-	if (path == NULL)
-	{
-		perror("path is empty\n");
-	}
-	pid = fork();
-	if (pid == -1)
-		perror("fork");
-	if (kill(pid, SIGINT) == 0)
-	{
-		execute = execve(path, argv, environ);
-		if (execute == -1)
+		if (*argv[0] == '/')
 		{
-			perror("execute");
+			path = argv[0];
+		}
+		else
+		{
+			path = _path_name(argv);
+		}
+		if (path == NULL)
+		{
+			perror("path is empty\n");
+		}
+		pid = fork();
+		if (pid == -1)
+			perror("fork");
+		if (kill(pid, SIGINT) == 0)
+		{
+			execute = execve(path, argv, environ);
+			if (execute == -1)
+			{
+				perror("execute");
+			}
 		}
 	}
 	else

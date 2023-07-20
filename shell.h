@@ -15,5 +15,5 @@ char *_strcpy(char *dest, char *src);
 ssize_t _strlen(const char *str);
 char *_strchr(char *s, char c);
 char *_strtok(char *str, char *delim);
-
+void _cd(const char *path, int argc);
 #endif
