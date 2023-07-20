@@ -1,5 +1,10 @@
 #include "shell.h"
 
+/**
+ * _strlen - counts the number of characters in a string
+ * @str: string to be counted
+ * Return: number of characters
+ */
 ssize_t _strlen(const char *str)
 {
 	ssize_t count = 0;
@@ -11,6 +16,12 @@ ssize_t _strlen(const char *str)
 	return (count);
 }
 
+/**
+ * _strcpy - copy a string from source to destination
+ * @dest: where the copy of the source string is stored
+ * @src: the source string to be copied
+ * Return: the copy of the source string
+ */
 char *_strcpy(char *dest, char *src)
 {
 	ssize_t i = 0, strlen = 0;
