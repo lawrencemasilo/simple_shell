@@ -25,13 +25,13 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 	{
 		str_copy = malloc(sizeof(char *) * (_strlen(lineptr)));
 		str_copy = _strcpy(str_copy, lineptr);
-		token1 = strtok(lineptr, delim);
+		token1 = _strtok(lineptr, delim);
 		if (token1 != NULL)
 		{
 			while (token1 != NULL)
 			{
 				argc++;
-				token1 = strtok(NULL, delim);
+				token1 = _strtok(NULL, delim);
 			}
 		}
 		argv = malloc(sizeof(char *) * argc);
@@ -39,11 +39,11 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 		{
 			perror("Malloc failed");
 		}
-		token2 = strtok(str_copy, delim);
+		token2 = _strtok(str_copy, delim);
 		for (i = 0; i < argc; i++)
 		{
 			argv[i] = token2;
-			token2 = strtok(NULL, delim);
+			token2 = _strtok(NULL, delim);
 		}
 		argv[i] = NULL;
 		/*free(str_copy);*/

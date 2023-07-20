@@ -9,9 +9,9 @@ int main(void)
 {
 	/*Feel free to change the prompt*/
 	char *prompt = ";) ";
-	int line_got;
+	int line_got, exit_code;
 	size_t n = 0;
-	char *lineptr = NULL;
+	char *lineptr = NULL, *argument;
 
 	lineptr = malloc(sizeof(char *));
 	while (1)
@@ -31,11 +31,22 @@ int main(void)
 		}
 		if (line_got != -1)
 		{
-			if (strcmp(lineptr, "exit\n") == 0)
+			if (_strncmp(lineptr, "exit", 4) == 0)
 			{
-				write(STDOUT_FILENO, "Exiting the shell...\n", 21);
-				free(lineptr);
-				exit(EXIT_SUCCESS);
+				argument = lineptr + 4;/* move pointer after "exit" */
+				exit_code = _atoi(argument);/* converts arg to an int */
+				if (*argument == ' ')
+				{
+					argument++;
+					free(lineptr);
+					exit(exit_code);
+				}
+				else
+				{
+					/*if no argument is provided, exit with default status(0)*/
+					free(lineptr);
+					exit(EXIT_SUCCESS);
+				}
 			}
 			_tokenise_and_execute(lineptr, n);
 		}

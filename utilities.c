@@ -95,3 +95,41 @@ char *_strtok(char *str, char *delim)
 	}
 	return (token_start);
 }
+/**
+ * _atoi - converts character string to int
+ * @str: string to be converted to integer
+ * Return: converted integer
+ */
+int _atoi(const char *str)
+{
+	int result = 0, i = 0, sign = 1;
+
+	/* handle leading whitespaces */
+	while (str[i] == ' ')
+		i++;
+	/* handle optional sign */
+	if (str[i] == '-' || str[i] == '+')
+	{
+		sign = (str[i] == '-') ? -1 : 1;
+		i++;
+	}
+	/* convert digits to an int until non-digit char is encountered */
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		/* check for int overflow */
+		if (result > INT_MAX / 10 || (result == INT_MAX / 10 && str[i] - '0' > INT_MAX % 10))
+		{
+			if (sign == 1)
+			{
+				return (INT_MAX);
+			}
+			else
+			{
+				return (INT_MIN);
+			}
+		}
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (sign * result);
+}
