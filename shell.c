@@ -7,7 +7,7 @@
 
 int main(void)
 {
-	char *prompt = ";) ", *lineptr = NULL, *argument;
+	char *prompt = ";) ", *lineptr = NULL, *argument = lineptr + 4;
 	int line_got, exit_code = _atoi(argument);
 	size_t n = 0;
 
@@ -29,7 +29,6 @@ int main(void)
 		{
 			if (_strncmp(lineptr, "exit", 4) == 0)
 			{
-				argument = lineptr + 4;/* move pointer after "exit" */
 				if (*argument == ' ')
 				{
 					argument++;
