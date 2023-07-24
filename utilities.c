@@ -71,7 +71,7 @@ char *_strchr(char *s, char c)
 char *_strtok(char *str, char *delim)
 {
 	/* static variable to keep track of the position */
-	static char *next_token = NULL;
+	static char *next_token;
 	char *token_start;
 
 	if (str == NULL)
@@ -129,7 +129,8 @@ int _atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		/* check for int overflow */
-		if (result > INT_MAX / 10 || (result == INT_MAX / 10 && str[i] - '0' > INT_MAX % 10))
+		if (result > INT_MAX / 10 ||
+				(result == INT_MAX / 10 && str[i] - '0' > INT_MAX % 10))
 		{
 			if (sign == 1)
 			{
