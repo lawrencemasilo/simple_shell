@@ -7,8 +7,8 @@
 
 int main(void)
 {
-	char *prompt = ";) ", *lineptr = NULL, *argument = lineptr + 4;
-	int line_got, exit_code = _atoi(argument);
+	char *prompt = ";) ", *lineptr = NULL, *argument;
+	int line_got, exit_code;
 	size_t n = 0;
 
 	lineptr = malloc(sizeof(char *));
@@ -29,6 +29,8 @@ int main(void)
 		{
 			if (_strncmp(lineptr, "exit", 4) == 0)
 			{
+				argument = lineptr + 4;
+				exit_code = _atoi(argument);
 				if (*argument == ' ')
 				{
 					argument++;
