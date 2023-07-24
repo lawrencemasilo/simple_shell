@@ -103,3 +103,18 @@ int _strcmp(const char *str1, const char *str2)
 	result = *str1 - *str2;
 	return (result);
 }
+
+void _doublefree(char **str)
+{
+	int i = 0;
+
+	if (*str != NULL)
+	{
+		while(str[i] != NULL)
+		{
+			free(str[i]);
+			i++;
+		}
+		free(str);
+	}
+}
