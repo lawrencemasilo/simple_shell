@@ -32,7 +32,7 @@ int _strncmp(const char *s1, const char *s2, size_t n)
 /**
  * _cd - changes directories
  * @path: address of directory to change
- * @args: number of arguments
+ * @argc: number of arguments
  * Return: Nothing
  */
 void _cd(const char *path, int argc)
