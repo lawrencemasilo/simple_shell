@@ -7,7 +7,7 @@
 
 int main(void)
 {
-	char *prompt = ";) ", *lineptr = NULL, *argument;
+	char *prompt = "($) ", *lineptr = NULL, *argument;
 	int line_got, exit_code;
 	size_t n = 0;
 
