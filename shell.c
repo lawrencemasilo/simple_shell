@@ -1,14 +1,37 @@
 #include "shell.h"
 
 /**
+ * _exit_builtin - handles the "exit" built-in with args
+ * @lineptr: input line containing exit command and args
+ * Return: exit status for shell
+ */
+int _exit_builtin(char *lineptr)
+{
+	char *argument = lineptr + 4;
+	int exit_code = _atoi(argument);
+
+	if (*argument == ' ')
+	{
+		argument++;
+		free(lineptr);
+		exit(exit_code);
+	}
+	else
+	{
+		free(lineptr);
+		exit(EXIT_SUCCESS);
+	}
+}
+
+/**
  * main - entry point for the shell program
  * Return: 0 on success
  */
 
 int main(void)
 {
-	char *prompt = "($) ", *lineptr = NULL, *argument;
-	int line_got, exit_code;
+	char *prompt = "($) ", *lineptr = NULL;
+	int line_got;
 	size_t n = 0;
 
 	lineptr = malloc(sizeof(char *));
@@ -29,19 +52,7 @@ int main(void)
 		{
 			if (_strncmp(lineptr, "exit", 4) == 0)
 			{
-				argument = lineptr + 4;
-				exit_code = _atoi(argument);
-				if (*argument == ' ')
-				{
-					argument++;
-					free(lineptr);
-					exit(exit_code);
-				}
-				else
-				{
-					free(lineptr);
-					exit(EXIT_SUCCESS);
-				}
+				_exit_builtin(lineptr);
 			}
 			_tokenise_and_execute(lineptr, n);
 		}

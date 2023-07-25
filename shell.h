@@ -21,5 +21,6 @@ int _strncmp(const char *s1, const char *s2, size_t n);
 void _cd(const char *path, int argc);
 int _strcmp(const char *str1, const char *str2);
 void _doublefree(char **str);
+int _exit_builtin(char *lineptr);
 
 #endif
