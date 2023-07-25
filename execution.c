@@ -13,9 +13,7 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 	char *token1 = NULL, *token2 = NULL, *delim = " \n", *str_copy;
 
 	pid_t pid = fork();
-
 	(void) n;
-
 	if (pid == -1)
 		perror("Fork failed");
 	else if (pid == 0)
@@ -34,6 +32,7 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 		argv = malloc(sizeof(char *) * argc);
 		if (argv == NULL)
 		{
+			_doublefree(argv);
 			perror("Malloc failed");
 		}
 		token2 = _strtok(str_copy, delim);
@@ -88,13 +87,15 @@ void _execute(char **argv, int size)
 			execute = execve(path, argv, environ);
 			if (execute == -1)
 			{
-				perror("execute");
+				perror("Error ");
 			}
 		}
 	}
 	else
 	{
 		wait(NULL);
+		_doublefree(argv);
+		free(path);
 	}
 }
 
@@ -126,5 +127,6 @@ char *_path_name(char **argv)
 		i++;
 		j++;
 	}
+	/*_doublefree(argv);*/
 	return (complete_path);
 }

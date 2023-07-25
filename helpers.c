@@ -104,13 +104,18 @@ int _strcmp(const char *str1, const char *str2)
 	return (result);
 }
 
+/**
+ * _doublefree - frees a double pointer
+ * @str: the double pointer to be freed
+ * Return: Nothing
+ */
 void _doublefree(char **str)
 {
 	int i = 0;
 
 	if (*str != NULL)
 	{
-		while(str[i] != NULL)
+		while (str[i] != NULL)
 		{
 			free(str[i]);
 			i++;
@@ -118,3 +123,4 @@ void _doublefree(char **str)
 		free(str);
 	}
 }
+
