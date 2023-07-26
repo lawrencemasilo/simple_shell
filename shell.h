@@ -22,5 +22,7 @@ void _cd(const char *path, int argc);
 int _strcmp(const char *str1, const char *str2);
 void _doublefree(char **str);
 int _exit_builtin(char *lineptr);
+void error(char *file, char *command);
+int _putchar(char c);
 
 #endif

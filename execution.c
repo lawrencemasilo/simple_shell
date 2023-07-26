@@ -56,6 +56,7 @@ void _tokenise_and_execute(char *lineptr)
 void _execute_external(char **argv, char *path)
 {
 	int status;
+	char *command = argv[0];
 	pid_t pid = fork();
 
 	if (pid == -1)
@@ -67,6 +68,7 @@ void _execute_external(char **argv, char *path)
 		{
 			free(argv);
 			free(path);
+			error(argv[0], command);
 			exit(EXIT_FAILURE);
 		}
 	}
