@@ -53,7 +53,7 @@ int main(void)
 			{
 				_exit_builtin(lineptr);
 			}
-			_tokenise_and_execute(lineptr, n);
+			_tokenise_and_execute(lineptr);
 		}
 	}
 	free(lineptr);

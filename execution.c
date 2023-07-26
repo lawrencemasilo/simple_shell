@@ -3,17 +3,15 @@
 /**
  * _tokenise_and_execute - tokenise lineptr and pass arguments for execution
  * @lineptr: line from the stdin
- * @n: size of lineptr
  * Return: Nothing
  */
-void _tokenise_and_execute(char *lineptr, size_t n)
+void _tokenise_and_execute(char *lineptr)
 {
 	char **argv = NULL;
 	int argc = 0, i = 0;
 	char *token1 = NULL, *token2 = NULL, *delim = " \n", *str_copy;
-
 	pid_t pid = fork();
-	(void) n;
+
 	if (pid == -1)
 		perror("Fork failed");
 	else if (pid == 0)
@@ -89,9 +87,7 @@ void _execute(char **argv, int size)
 		{
 			execute = execve(path, argv, environ);
 			if (execute == -1)
-			{
 				perror("Error ");
-			}
 		}
 		free(path);
 	}
