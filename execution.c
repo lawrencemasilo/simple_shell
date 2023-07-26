@@ -44,6 +44,8 @@ void _tokenise_and_execute(char *lineptr, size_t n)
 		argv[i] = NULL;
 		_execute(argv, argc);
 		free(str_copy);
+		_doublefree(argv);
+		free(lineptr);
 	}
 	else
 		wait(NULL);
@@ -57,15 +59,15 @@ void _tokenise_and_execute(char *lineptr, size_t n)
  */
 void _execute(char **argv, int size)
 {
-	char *path = NULL;
+	char *path;
 	int execute;
 	pid_t pid;
 
-	if (strcmp(argv[0], "cd") == 0)
+	if (_strcmp(argv[0], "cd") == 0)
 	{
 		_cd(argv[1], size);
 	}
-	else if (strcmp(argv[0], "cd") != 0)
+	else if (_strcmp(argv[0], "cd") != 0)
 	{
 		if (*argv[0] == '/')
 		{
@@ -77,6 +79,7 @@ void _execute(char **argv, int size)
 		}
 		if (path == NULL)
 		{
+			free(path);
 			perror("path is empty\n");
 		}
 		pid = fork();
@@ -90,12 +93,12 @@ void _execute(char **argv, int size)
 				perror("Error ");
 			}
 		}
+		free(path);
 	}
 	else
 	{
 		wait(NULL);
 		_doublefree(argv);
-		free(path);
 	}
 }
 
@@ -127,6 +130,5 @@ char *_path_name(char **argv)
 		i++;
 		j++;
 	}
-	/*_doublefree(argv);*/
 	return (complete_path);
 }

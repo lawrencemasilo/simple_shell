@@ -34,7 +34,6 @@ int main(void)
 	int line_got;
 	size_t n = 0;
 
-	lineptr = malloc(sizeof(char *));
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
