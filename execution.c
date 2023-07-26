@@ -41,10 +41,11 @@ void _tokenise_and_execute(char *lineptr)
 			_execute(argv, argc);
 		}
 		free(str_copy);
-		free(argv);
 	}
 	else
+	{
 		wait(NULL);
+	}
 }
 /**
  * _execute_external - executes external commands
@@ -65,6 +66,7 @@ void _execute_external(char **argv, char *path)
 		if (execve(path, argv, environ) == -1)
 		{
 			free(argv);
+			free(path);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -74,7 +76,9 @@ void _execute_external(char **argv, char *path)
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
 		{
 			exit(EXIT_FAILURE);
+			free(path);
 		}
+		free(path);
 		free(argv);
 	}
 }
@@ -90,7 +94,7 @@ int _execute_builtin(char **argv, int size)
 	if (_strcmp(argv[0], "cd") == 0)
 	{
 		_cd(argv[1], size);
-		return (1);
+			return (1);
 	}
 	return (0);
 }
@@ -123,7 +127,6 @@ void _execute(char **argv, int size)
 		exit(EXIT_FAILURE);
 	}
 	_execute_external(argv, path);
-	free(path);
 }
 
 /**
@@ -134,21 +137,23 @@ void _execute(char **argv, int size)
 char *_path_name(char **argv)
 {
 	int i = 0, j = 0;
-	char *part_path = "/bin/";
+	char *part = "/bin/";
 	char *complete_path = NULL;
 	char *command = strdup(argv[0]);
 
-	complete_path = malloc((sizeof(command) + 1) + (sizeof(part_path) + 1));
+	complete_path = malloc(sizeof(char) *
+			(_strlen(argv[0])) + (_strlen(part) + 2));
 	if (complete_path == NULL)
 	{
+		free(command);
 		free(complete_path);
 		perror("memory allocation failed");
 	}
 	else
 	{
-		while (part_path[i] != '\0')
+		while (part[i] != '\0')
 		{
-			complete_path[i] = part_path[i];
+			complete_path[i] = part[i];
 			i++;
 		}
 		while (command[j] != '\0')
@@ -157,10 +162,9 @@ char *_path_name(char **argv)
 			i++;
 			j++;
 		}
-		return (complete_path);
+		complete_path[i] = '\0';
 	}
 	free(command);
-	free(complete_path);
-	return (NULL);
+	return (complete_path);
 }
 
