@@ -19,7 +19,7 @@ void error(char *file, char *command)
 	_putchar('1');
 	_putchar(':');
 	_putchar(' ');
-	
+
 	for (i = 0; command[i] != '\0'; i++)
 	{
 		_putchar(command[i]);
