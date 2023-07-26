@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 /**
  * _tokenise_and_execute - tokenise lineptr and pass arguments for execution
  * @lineptr: line from the stdin
@@ -25,10 +26,10 @@ void _tokenise_and_execute(char *lineptr)
 				argc++;
 				token1 = strtok(NULL, delim);
 			}
-			argv = malloc(sizeof(char *) * argc + 1);
+			argv = malloc(sizeof(char *) * argc + sizeof(NULL));
 			if (argv == NULL)
 			{
-				perror("Malloc failed");
+				_doublefree(argv);
 			}
 			token2 = _strtok(str_copy, delim);
 			for (i = 0; i < argc; i++)
@@ -38,10 +39,8 @@ void _tokenise_and_execute(char *lineptr)
 			}
 			argv[i] = NULL;
 			_execute(argv, argc);
+			_doublefree(argv);
 		}
-		else
-			free(lineptr);
-		free(argv);
 		free(str_copy);
 	}
 	else
@@ -57,14 +56,14 @@ void _tokenise_and_execute(char *lineptr)
 void _execute(char **argv, int size)
 {
 	char *path;
-	int execute;
+	/*int execute;*/
 	pid_t pid;
 
-	if (strcmp(argv[0], "cd") == 0)
+	if (_strcmp(argv[0], "cd") == 0)
 	{
 		_cd(argv[1], size);
 	}
-	else if (strcmp(argv[0], "cd") != 0)
+	else if (_strcmp(argv[0], "cd") != 0)
 	{
 		if (*argv[0] == '/')
 		{
@@ -82,12 +81,13 @@ void _execute(char **argv, int size)
 		pid = fork();
 		if (pid == -1)
 			perror("fork");
-		if (kill(pid, SIGINT) == 0)
+		execve(path, argv, environ);
+		/*if (kill(pid, SIGINT) == 0)
 		{
 			execute = execve(path, argv, environ);
 			if (execute == -1)
 				perror("Error ");
-		}
+		}*/
 		free(path);
 	}
 	else
@@ -114,18 +114,23 @@ char *_path_name(char **argv)
 		free(complete_path);
 		perror("memory allocation failed");
 	}
-	while (part_path[i] != '\0')
+	else 
 	{
-		complete_path[i] = part_path[i];
-		i++;
-	}
-	while (command[j] != '\0')
-	{
-		complete_path[i] = command[j];
-		i++;
-		j++;
+		while (part_path[i] != '\0')
+		{
+			complete_path[i] = part_path[i];
+			i++;
+		}
+		while (command[j] != '\0')
+		{
+			complete_path[i] = command[j];
+			i++;
+			j++;
+		}
+		return (complete_path);
 	}
 	free(command);
-	return (complete_path);
+	free(complete_path);
+	return (NULL);
 }
 
