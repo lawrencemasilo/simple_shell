@@ -120,4 +120,3 @@ void _doublefree(char **str)
 	}
 	free(str);
 }
-

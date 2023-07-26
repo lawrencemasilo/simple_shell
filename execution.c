@@ -17,7 +17,7 @@ void _tokenise_and_execute(char *lineptr)
 		perror("Fork failed");
 	else if (pid == 0)
 	{
-		str_copy = strdup(lineptr);
+		str_copy= strdup(lineptr);
 		token1 = strtok(lineptr, delim);
 		if (token1 != NULL)
 		{
@@ -29,7 +29,7 @@ void _tokenise_and_execute(char *lineptr)
 			argv = malloc(sizeof(char *) * argc + sizeof(NULL));
 			if (argv == NULL)
 			{
-				_doublefree(argv);
+				free(argv);
 			}
 			token2 = _strtok(str_copy, delim);
 			for (i = 0; i < argc; i++)
@@ -39,9 +39,9 @@ void _tokenise_and_execute(char *lineptr)
 			}
 			argv[i] = NULL;
 			_execute(argv, argc);
-			_doublefree(argv);
 		}
 		free(str_copy);
+		free(argv);
 	}
 	else
 		wait(NULL);
@@ -87,7 +87,6 @@ void _execute(char **argv, int size)
 		{
 			if (execve(path, argv, environ) == -1)
 			{
-				free(argv);
 				exit(127);
 			}
 		}
@@ -98,7 +97,6 @@ void _execute(char **argv, int size)
 			{
 				exit(127);
 			}
-			free(argv);
 		}
 	}
 	else
