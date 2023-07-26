@@ -17,7 +17,7 @@ void _tokenise_and_execute(char *lineptr)
 		perror("Fork failed");
 	else if (pid == 0)
 	{
-		str_copy= strdup(lineptr);
+		str_copy = strdup(lineptr);
 		token1 = strtok(lineptr, delim);
 		if (token1 != NULL)
 		{
@@ -46,6 +46,54 @@ void _tokenise_and_execute(char *lineptr)
 	else
 		wait(NULL);
 }
+/**
+ * _execute_external - executes external commands
+ * @argv: argument vector
+ * @path: path to executable
+ * Return: nothing
+ */
+void _execute_external(char **argv, char *path)
+{
+	int status;
+	pid_t pid = fork();
+
+	if (pid == -1)
+	{
+		perror("fork");
+	} else if (pid == 0)
+	{
+		if (execve(path, argv, environ) == -1)
+		{
+			free(argv);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		wait(&status);
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
+		{
+			exit(EXIT_FAILURE);
+		}
+		free(argv);
+	}
+}
+
+/**
+ * _execute_builtin - executes built-in commands
+ * @argv: argument vector
+ * @size: argument count
+ * Return: 1 if built-in is executed, otherwise 0
+ */
+int _execute_builtin(char **argv, int size)
+{
+	if (_strcmp(argv[0], "cd") == 0)
+	{
+		_cd(argv[1], size);
+		return (1);
+	}
+	return (0);
+}
 
 /**
  * _execute - executes input command
@@ -56,53 +104,26 @@ void _tokenise_and_execute(char *lineptr)
 void _execute(char **argv, int size)
 {
 	char *path;
-	/*int execute;*/
-	int status;
-	pid_t pid;
 
-	if (_strcmp(argv[0], "cd") == 0)
+	if (_execute_builtin(argv, size))
+		return;
+
+	if (*argv[0] == '/')
 	{
-		_cd(argv[1], size);
-	}
-	else if (_strcmp(argv[0], "cd") != 0)
-	{
-		if (*argv[0] == '/')
-		{
-			path = argv[0];
-		}
-		else
-		{
-			path = _path_name(argv);
-		}
-		if (path == NULL)
-		{
-			free(path);
-			perror("path is empty\n");
-		}
-		pid = fork();
-		if (pid == -1)
-			perror("fork");
-		/*execve(path, argv, environ);*/
-		if (pid == 0)
-		{
-			if (execve(path, argv, environ) == -1)
-			{
-				exit(127);
-			}
-		}
-		else
-		{
-			wait(&status);
-			if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
-			{
-				exit(127);
-			}
-		}
+		path = argv[0];
 	}
 	else
 	{
-		wait(NULL);
+		path = _path_name(argv);
 	}
+	if (path == NULL)
+	{
+		free(path);
+		perror("path is empty\n");
+		exit(EXIT_FAILURE);
+	}
+	_execute_external(argv, path);
+	free(path);
 }
 
 /**
