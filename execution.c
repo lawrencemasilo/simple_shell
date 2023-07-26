@@ -57,6 +57,7 @@ void _execute(char **argv, int size)
 {
 	char *path;
 	/*int execute;*/
+	int status;
 	pid_t pid;
 
 	if (_strcmp(argv[0], "cd") == 0)
@@ -81,14 +82,24 @@ void _execute(char **argv, int size)
 		pid = fork();
 		if (pid == -1)
 			perror("fork");
-		execve(path, argv, environ);
-		/*if (kill(pid, SIGINT) == 0)
+		/*execve(path, argv, environ);*/
+		if (pid == 0)
 		{
-			execute = execve(path, argv, environ);
-			if (execute == -1)
-				perror("Error ");
-		}*/
-		free(path);
+			if (execve(path, argv, environ) == -1)
+			{
+				free(argv);
+				exit(127);
+			}
+		}
+		else
+		{
+			wait(&status);
+			if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
+			{
+				exit(127);
+			}
+			free(argv);
+		}
 	}
 	else
 	{
@@ -114,7 +125,7 @@ char *_path_name(char **argv)
 		free(complete_path);
 		perror("memory allocation failed");
 	}
-	else 
+	else
 	{
 		while (part_path[i] != '\0')
 		{
