@@ -113,14 +113,11 @@ void _doublefree(char **str)
 {
 	int i = 0;
 
-	if (*str != NULL)
+	while (str[i] != NULL)
 	{
-		while (str[i] != NULL)
-		{
-			free(str[i]);
-			i++;
-		}
-		free(str);
+		free(str[i]);
+		i++;
 	}
+	free(str);
 }
 

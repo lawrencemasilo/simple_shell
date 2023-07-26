@@ -16,34 +16,33 @@ void _tokenise_and_execute(char *lineptr)
 		perror("Fork failed");
 	else if (pid == 0)
 	{
-		str_copy = malloc(sizeof(char *) * (_strlen(lineptr)));
-		str_copy = _strcpy(str_copy, lineptr);
-		token1 = _strtok(lineptr, delim);
+		str_copy = strdup(lineptr);
+		token1 = strtok(lineptr, delim);
 		if (token1 != NULL)
 		{
 			while (token1 != NULL)
 			{
 				argc++;
-				token1 = _strtok(NULL, delim);
+				token1 = strtok(NULL, delim);
 			}
+			argv = malloc(sizeof(char *) * argc + 1);
+			if (argv == NULL)
+			{
+				perror("Malloc failed");
+			}
+			token2 = _strtok(str_copy, delim);
+			for (i = 0; i < argc; i++)
+			{
+				argv[i] = token2;
+				token2 = _strtok(NULL, delim);
+			}
+			argv[i] = NULL;
+			_execute(argv, argc);
 		}
-		argv = malloc(sizeof(char *) * argc);
-		if (argv == NULL)
-		{
-			_doublefree(argv);
-			perror("Malloc failed");
-		}
-		token2 = _strtok(str_copy, delim);
-		for (i = 0; i < argc; i++)
-		{
-			argv[i] = token2;
-			token2 = _strtok(NULL, delim);
-		}
-		argv[i] = NULL;
-		_execute(argv, argc);
+		else
+			free(lineptr);
+		free(argv);
 		free(str_copy);
-		_doublefree(argv);
-		free(lineptr);
 	}
 	else
 		wait(NULL);
@@ -61,11 +60,11 @@ void _execute(char **argv, int size)
 	int execute;
 	pid_t pid;
 
-	if (_strcmp(argv[0], "cd") == 0)
+	if (strcmp(argv[0], "cd") == 0)
 	{
 		_cd(argv[1], size);
 	}
-	else if (_strcmp(argv[0], "cd") != 0)
+	else if (strcmp(argv[0], "cd") != 0)
 	{
 		if (*argv[0] == '/')
 		{
@@ -94,7 +93,6 @@ void _execute(char **argv, int size)
 	else
 	{
 		wait(NULL);
-		_doublefree(argv);
 	}
 }
 
@@ -113,6 +111,7 @@ char *_path_name(char **argv)
 	complete_path = malloc((sizeof(command) + 1) + (sizeof(part_path) + 1));
 	if (complete_path == NULL)
 	{
+		free(complete_path);
 		perror("memory allocation failed");
 	}
 	while (part_path[i] != '\0')
@@ -126,5 +125,7 @@ char *_path_name(char **argv)
 		i++;
 		j++;
 	}
+	free(command);
 	return (complete_path);
 }
+
