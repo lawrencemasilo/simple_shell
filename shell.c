@@ -25,7 +25,7 @@ int _exit_builtin(char *lineptr)
 	if (*argument == ' ')
 	{
 		argument++;
-		free(lineptr);
+		free(argument);
 		exit(exit_code);
 	}
 	else
@@ -60,12 +60,12 @@ int main(int ac, char **av)
 		if (line_got == -1)
 		{
 			free(lineptr);
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 		if (ctrl_signal == 1)
 		{
 			free(lineptr);
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 		if (line_got != -1)
 		{

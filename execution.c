@@ -19,8 +19,8 @@ void _tokenise_and_execute(char *lineptr, int ac, char **av)
 		perror("Fork failed");
 	else if (pid == 0)
 	{
-		str_copy = strdup(lineptr);
-		token1 = _strtok(lineptr, delim);
+		str_copy = _strdup(lineptr);
+		token1 = _strtok(str_copy, delim);
 		if (token1 != NULL)
 		{
 			while (token1 != NULL)
@@ -33,7 +33,7 @@ void _tokenise_and_execute(char *lineptr, int ac, char **av)
 			{
 				free(argv);
 			}
-			token2 = _strtok(str_copy, delim);
+			token2 = _strtok(lineptr, delim);
 			for (i = 0; i < argc; i++)
 			{
 				argv[i] = token2;

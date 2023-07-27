@@ -120,3 +120,24 @@ void _doublefree(char **str)
 	}
 	free(str);
 }
+
+/**
+ * _strdup - duplicates a string
+ * @str: string to be duplicated
+ * Return: pointer to duplicate string on success,otherwise NULL
+ */
+char *_strdup(char *str)
+{
+	size_t len = _strlen(str) + 1;
+	char *ptr;
+
+	if (str == NULL)
+		return (NULL);
+	
+	ptr = (char*)malloc(len);
+
+	if (ptr != NULL)
+		_strcpy(ptr, str);
+
+	return (ptr);
+}

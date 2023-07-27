@@ -31,5 +31,6 @@ void error(char *file, char *command, int ac, char **av);
 int _execute_builtin(char **argv, int size);
 int _putchar(char c);
 void signal_handler(int signal_num);
+char *_strdup(char *str);
 
 #endif
