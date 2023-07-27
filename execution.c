@@ -75,10 +75,11 @@ void _execute_external(char **argv, char *path)
 	else
 	{
 		wait(&status);
-		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
+		if (WIFEXITED(status))
 		{
-			exit(EXIT_FAILURE);
+			errno = WEXITSTATUS(status);
 			free(path);
+			exit(EXIT_FAILURE);
 		}
 		free(path);
 		free(argv);
