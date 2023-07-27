@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <errno.h>
 
 extern char **environ;
 void _tokenise_and_execute(char *lineptr);
