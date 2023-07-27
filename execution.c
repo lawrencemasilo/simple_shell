@@ -4,9 +4,11 @@
 /**
  * _tokenise_and_execute - tokenise lineptr and pass arguments for execution
  * @lineptr: line from the stdin
+ * @ac: number of argument
+ * @av: command line arguments
  * Return: Nothing
  */
-void _tokenise_and_execute(char *lineptr)
+void _tokenise_and_execute(char *lineptr, int ac, char **av)
 {
 	char **argv = NULL;
 	int argc = 0, i = 0;
@@ -38,7 +40,7 @@ void _tokenise_and_execute(char *lineptr)
 				token2 = _strtok(NULL, delim);
 			}
 			argv[i] = NULL;
-			_execute(argv, argc);
+			_execute(argv, argc, ac, av);
 		}
 		free(str_copy);
 	}
@@ -51,9 +53,11 @@ void _tokenise_and_execute(char *lineptr)
  * _execute_external - executes external commands
  * @argv: argument vector
  * @path: path to executable
+ * @ac: number of argument
+ * @av: command line arguments
  * Return: nothing
  */
-void _execute_external(char **argv, char *path)
+void _execute_external(char **argv, char *path, int ac, char **av)
 {
 	int status;
 	char *command = argv[0];
@@ -68,7 +72,7 @@ void _execute_external(char **argv, char *path)
 		{
 			free(argv);
 			free(path);
-			error(argv[0], command);
+			error(argv[0], command, ac, av);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -106,9 +110,11 @@ int _execute_builtin(char **argv, int size)
  * _execute - executes input command
  * @argv: argument vector
  * @size: argument count
+ * @ac: number of argument
+ * @av: command line arguments
  * Return: Nothing
  */
-void _execute(char **argv, int size)
+void _execute(char **argv, int size, int ac, char **av)
 {
 	char *path;
 
@@ -129,7 +135,7 @@ void _execute(char **argv, int size)
 		perror("path is empty\n");
 		exit(EXIT_FAILURE);
 	}
-	_execute_external(argv, path);
+	_execute_external(argv, path, ac, av);
 }
 
 /**

@@ -25,10 +25,12 @@ int _exit_builtin(char *lineptr)
 
 /**
  * main - entry point for the shell program
+ * @ac: number of argument
+ * @av: command line arguments
  * Return: 0 on success
  */
 
-int main(void)
+int main(int ac, char **av)
 {
 	char *prompt = "($) ", *lineptr = NULL;
 	int line_got;
@@ -53,7 +55,7 @@ int main(void)
 			{
 				_exit_builtin(lineptr);
 			}
-			_tokenise_and_execute(lineptr);
+			_tokenise_and_execute(lineptr, ac, av);
 		}
 	}
 	free(lineptr);
