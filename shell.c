@@ -1,6 +1,18 @@
 #include "shell.h"
 
 /**
+ * _signal_handler - executes when specific signal is received from user
+ * @signal_num: the signal number
+ * Return: Nothing
+ */
+void _signal_handler(int signal_num)
+{
+	(void) signal_num;
+
+	ctrl_signal = 1;
+}
+
+/**
  * _exit_builtin - handles the "exit" built-in with args
  * @lineptr: input line containing exit command and args
  * Return: exit status for shell
@@ -36,6 +48,7 @@ int main(int ac, char **av)
 	int line_got;
 	size_t n = 0;
 
+	signal(2, _signal_handler);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
@@ -45,6 +58,11 @@ int main(int ac, char **av)
 		}
 		line_got = getline(&lineptr, &n, stdin);
 		if (line_got == -1)
+		{
+			free(lineptr);
+			exit(0);
+		}
+		if (ctrl_signal == 1)
 		{
 			free(lineptr);
 			exit(0);

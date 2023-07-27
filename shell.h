@@ -8,8 +8,11 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
+#include <signal.h>
 
+int ctrl_signal;
 extern char **environ;
+
 void _tokenise_and_execute(char *lineptr, int ac, char **av);
 void _execute(char **argv, int size, int ac, char **av);
 char *_path_name(char **argv);
@@ -27,5 +30,6 @@ int _exit_builtin(char *lineptr);
 void error(char *file, char *command, int ac, char **av);
 int _execute_builtin(char **argv, int size);
 int _putchar(char c);
+void signal_handler(int signal_num);
 
 #endif
