@@ -20,13 +20,13 @@ void _tokenise_and_execute(char *lineptr, int ac, char **av)
 	else if (pid == 0)
 	{
 		str_copy = strdup(lineptr);
-		token1 = strtok(lineptr, delim);
+		token1 = _strtok(lineptr, delim);
 		if (token1 != NULL)
 		{
 			while (token1 != NULL)
 			{
 				argc++;
-				token1 = strtok(NULL, delim);
+				token1 = _strtok(NULL, delim);
 			}
 			argv = malloc(sizeof(char *) * argc + sizeof(NULL));
 			if (argv == NULL)
