@@ -43,27 +43,40 @@ char **_tokenise(char *lineptr)
 	return (argv);
 }
 /**
- * _execute_external - executes external commands
+ * _execute - executes commands
  * @argv: argument vector
- * @path: path to executable
+ * @size: number of arguments
  * @ac: number of argument
  * @av: command line arguments
  * Return: nothing
  */
-void _execute_external(char **argv, char *path, int ac, char **av)
+void _execute(char **argv, int size, int ac, char **av)
 {
 	int status;
-	char *command = argv[0];
-	pid_t pid = fork();
+	char *command = argv[0], *path;
+	pid_t pid;
+
+	if (_execute_builtin(argv, size))
+		return;
+	if (*argv[0] == '/')
+		path = argv[0];
+	else
+		path = _path_name(argv);
+	if (path == NULL)
+	{
+		free(path);
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
 
 	if (pid == -1)
-	{
 		perror("fork");
-	} else if (pid == 0)
+	else if (pid == 0)
 	{
 		if (execve(path, argv, environ) == -1)
 		{
-			free(path);
+			if (*argv[0] != '/')
+				free(path);
 			error(argv[0], command, ac, av);
 			_doublefree(argv);
 			exit(EXIT_FAILURE);
@@ -71,13 +84,12 @@ void _execute_external(char **argv, char *path, int ac, char **av)
 	}
 	else
 	{
+		if (*argv[0] != '/')
+			free(path);
+		free(argv);
 		wait(&status);
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
-		{
-			free(path);
-			_doublefree(argv);
 			exit(EXIT_FAILURE);
-		}
 	}
 }
 
@@ -95,38 +107,6 @@ int _execute_builtin(char **argv, int size)
 			return (1);
 	}
 	return (0);
-}
-
-/**
- * _execute - executes input command
- * @argv: argument vector
- * @size: argument count
- * @ac: number of argument
- * @av: command line arguments
- * Return: Nothing
- */
-void _execute(char **argv, int size, int ac, char **av)
-{
-	char *path;
-
-	if (_execute_builtin(argv, size))
-		return;
-
-	if (*argv[0] == '/')
-	{
-		path = argv[0];
-	}
-	else
-	{
-		path = _path_name(argv);
-	}
-	if (path == NULL)
-	{
-		free(path);
-		perror("path is empty\n");
-		exit(EXIT_FAILURE);
-	}
-	_execute_external(argv, path, ac, av);
 }
 
 /**
