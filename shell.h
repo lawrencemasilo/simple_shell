@@ -26,7 +26,7 @@ int _strncmp(const char *s1, const char *s2, size_t n);
 void _cd(const char *path, int argc);
 int _strcmp(const char *str1, const char *str2);
 void _doublefree(char **str);
-void _execute_external(char **argv, int ac, char **av);
+void _execute_external(char **argv, char *path, int ac, char **av);
 int _exit_builtin(char *lineptr);
 void error(char *file, char *command, int ac, char **av);
 int _execute_builtin(char **argv, int size);
