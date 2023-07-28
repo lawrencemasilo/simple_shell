@@ -11,6 +11,7 @@ void _signal_handler(int signal_num)
 
 	write(STDOUT_FILENO, "\n ", _strlen("\n "));
 	write(STDOUT_FILENO, "($) ", _strlen("($) "));
+	fflush(stdout);
 }
 
 /**
@@ -35,7 +36,6 @@ int _exit_builtin(char *lineptr)
 		exit(EXIT_SUCCESS);
 	}
 }
-
 /**
  * main - entry point for the shell program
  * @ac: number of argument
@@ -46,8 +46,10 @@ int _exit_builtin(char *lineptr)
 int main(int ac, char **av)
 {
 	char *prompt = "($) ", *lineptr = NULL;
-	int line_got;
+	ssize_t line_got = 0;
 	size_t n = 0;
+	char **argv;
+	int argc = 0;
 
 	signal(SIGINT, _signal_handler);
 	while (1)
@@ -58,27 +60,29 @@ int main(int ac, char **av)
 			write(STDOUT_FILENO, prompt, strlen(prompt));
 		}
 		line_got = getline(&lineptr, &n, stdin);
-		if (line_got == -1)
-		{
-			free(lineptr);
-			exit(0);
-		}
 		if (line_got != -1)
 		{
 			if (_strncmp(lineptr, "exit", 4) == 0)
 			{
 				_exit_builtin(lineptr);
 			}
-			_tokenise_and_execute(lineptr, ac, av);
+			argv = _tokenise(lineptr);
+			if (argv == NULL)
+			{
+				_doublefree(argv);
+				return (-1);
+			}
+			argc = count(lineptr);
+			if (argv != NULL)
+				_execute(argv, argc, ac, av);
 		}
 		else
 		{
 			free(lineptr);
-			write(STDOUT_FILENO, "\n ", _strlen("\n "));
 			exit(0);
 		}
 	}
+	_doublefree(argv);
 	free(lineptr);
-	lineptr = NULL;
 	return (0);
 }

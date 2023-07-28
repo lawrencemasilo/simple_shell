@@ -1,53 +1,46 @@
 #include "shell.h"
 
-
 /**
- * _tokenise_and_execute - tokenise lineptr and pass arguments for execution
+ * _tokenise - tokenise lineptr
  * @lineptr: line from the stdin
- * @ac: number of argument
- * @av: command line arguments
- * Return: Nothing
+ * Return: An array of tokens
  */
-void _tokenise_and_execute(char *lineptr, int ac, char **av)
+char **_tokenise(char *lineptr)
 {
 	char **argv = NULL;
-	int argc = 0, i = 0;
+	int argc = 0, j = 0, i = 0;
 	char *token1 = NULL, *token2 = NULL, *delim = " \n", *str_copy;
-	pid_t pid = fork();
 
-	if (pid == -1)
-		perror("Fork failed");
-	else if (pid == 0)
+	str_copy = _strdup(lineptr);
+	token1 = _strtok(str_copy, delim);
+	if (token1 == NULL)
+		return (NULL);
+	while (token1 != NULL)
 	{
-		str_copy = _strdup(lineptr);
-		token1 = _strtok(str_copy, delim);
-		if (token1 != NULL)
+		argc++;
+		token1 = _strtok(NULL, delim);
+	}
+	argv = malloc(sizeof(char *) * argc + sizeof(NULL));
+	token2 = _strtok(lineptr, delim);
+	if (token2 == NULL)
+		return (NULL);
+	for (j = 0; j < argc; j++)
+	{
+		argv[j] = token2;
+		token2 = _strtok(NULL, delim);
+	}
+	argv[j] = NULL;
+	if (argv == NULL)
+	{
+		for (i = 0; argv[i] != NULL; i++)
 		{
-			while (token1 != NULL)
-			{
-				argc++;
-				token1 = _strtok(NULL, delim);
-			}
-			argv = malloc(sizeof(char *) * argc + sizeof(NULL));
-			if (argv == NULL)
-			{
-				free(argv);
-			}
-			token2 = _strtok(lineptr, delim);
-			for (i = 0; i < argc; i++)
-			{
-				argv[i] = token2;
-				token2 = _strtok(NULL, delim);
-			}
-			argv[i] = NULL;
-			_execute(argv, argc, ac, av);
+			free(argv[i]);
 		}
-		free(str_copy);
+		free(argv);
+		return (NULL);
 	}
-	else
-	{
-		wait(NULL);
-	}
+	free(str_copy);
+	return (argv);
 }
 /**
  * _execute_external - executes external commands
@@ -70,9 +63,9 @@ void _execute_external(char **argv, char *path, int ac, char **av)
 	{
 		if (execve(path, argv, environ) == -1)
 		{
-			free(argv);
 			free(path);
 			error(argv[0], command, ac, av);
+			_doublefree(argv);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -82,10 +75,9 @@ void _execute_external(char **argv, char *path, int ac, char **av)
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
 		{
 			free(path);
+			_doublefree(argv);
 			exit(EXIT_FAILURE);
 		}
-		free(path);
-		free(argv);
 	}
 }
 
@@ -175,4 +167,3 @@ char *_path_name(char **argv)
 	free(command);
 	return (complete_path);
 }
-
