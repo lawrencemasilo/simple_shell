@@ -33,7 +33,7 @@ int _exit_builtin(char *lineptr)
 	else
 	{
 		free(lineptr);
-		exit(EXIT_SUCCESS);
+		exit(2);
 	}
 }
 /**
