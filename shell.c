@@ -9,7 +9,8 @@ void _signal_handler(int signal_num)
 {
 	(void) signal_num;
 
-	ctrl_signal = 1;
+	write(STDOUT_FILENO, "\n ", _strlen("\n "));
+	write(STDOUT_FILENO, "($) ", _strlen("($) "));
 }
 
 /**
@@ -48,7 +49,7 @@ int main(int ac, char **av)
 	int line_got;
 	size_t n = 0;
 
-	signal(2, _signal_handler);
+	signal(SIGINT, _signal_handler);
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
@@ -60,12 +61,7 @@ int main(int ac, char **av)
 		if (line_got == -1)
 		{
 			free(lineptr);
-			exit(EXIT_SUCCESS);
-		}
-		if (ctrl_signal == 1)
-		{
-			free(lineptr);
-			exit(EXIT_SUCCESS);
+			exit(0);
 		}
 		if (line_got != -1)
 		{
@@ -75,7 +71,14 @@ int main(int ac, char **av)
 			}
 			_tokenise_and_execute(lineptr, ac, av);
 		}
+		else
+		{
+			free(lineptr);
+			write(STDOUT_FILENO, "\n ", _strlen("\n "));
+			exit(0);
+		}
 	}
 	free(lineptr);
+	lineptr = NULL;
 	return (0);
 }
