@@ -133,8 +133,8 @@ char *_strdup(char *str)
 
 	if (str == NULL)
 		return (NULL);
-	
-	ptr = (char*)malloc(len);
+
+	ptr = (char *)malloc(len);
 
 	if (ptr != NULL)
 		_strcpy(ptr, str);
