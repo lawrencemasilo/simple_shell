@@ -14,7 +14,7 @@ extern char **environ;
 
 char **_tokenise(char *lineptr);
 int count(char *lineptr);
-void _execute(char **argv, int size, int ac, char **av);
+int _execute(char **argv, int size, int ac, char **av);
 char *_path_name(char **argv);
 char *_strcpy(char *dest, char *src);
 ssize_t _strlen(const char *str);
@@ -26,7 +26,7 @@ void _cd(const char *path, int argc);
 int _strcmp(const char *str1, const char *str2);
 void _doublefree(char **str);
 int _exit_builtin(char *lineptr);
-void error(char *file, char *command, int ac, char **av);
+void error(char *command, int ac, char **av);
 int _execute_builtin(char **argv, int size);
 int _putchar(char c);
 void signal_handler(int signal_num);

@@ -14,7 +14,10 @@ char **_tokenise(char *lineptr)
 	str_copy = _strdup(lineptr);
 	token1 = _strtok(str_copy, delim);
 	if (token1 == NULL)
+	{
+		free(str_copy);
 		return (NULL);
+	}
 	while (token1 != NULL)
 	{
 		argc++;
@@ -50,14 +53,14 @@ char **_tokenise(char *lineptr)
  * @av: command line arguments
  * Return: nothing
  */
-void _execute(char **argv, int size, int ac, char **av)
+int _execute(char **argv, int size, int ac, char **av)
 {
 	int status;
 	char *command = argv[0], *path;
 	pid_t pid;
 
 	if (_execute_builtin(argv, size))
-		return;
+		return (0);
 	if (*argv[0] == '/')
 		path = argv[0];
 	else
@@ -77,9 +80,9 @@ void _execute(char **argv, int size, int ac, char **av)
 		{
 			if (*argv[0] != '/')
 				free(path);
-			error(argv[0], command, ac, av);
-			_doublefree(argv);
-			exit(EXIT_FAILURE);
+			error(command, ac, av);
+			return (-1);
+			/*exit(EXIT_FAILURE);*/
 		}
 	}
 	else
@@ -91,6 +94,7 @@ void _execute(char **argv, int size, int ac, char **av)
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 127)
 			exit(EXIT_FAILURE);
 	}
+	return (0);
 }
 
 /**

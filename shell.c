@@ -45,10 +45,9 @@ int _exit_builtin(char *lineptr)
 
 int main(int ac, char **av)
 {
-	char *prompt = "($) ", *lineptr = NULL;
+	char *prompt = "($) ", *lineptr = NULL, **argv;
 	ssize_t line_got = 0;
 	size_t n = 0;
-	char **argv;
 	int argc = 0;
 
 	signal(SIGINT, _signal_handler);
@@ -67,14 +66,14 @@ int main(int ac, char **av)
 				_exit_builtin(lineptr);
 			}
 			argv = _tokenise(lineptr);
-			if (argv == NULL)
-			{
-				_doublefree(argv);
-				return (-1);
-			}
 			argc = count(lineptr);
 			if (argv != NULL)
-				_execute(argv, argc, ac, av);
+				if (_execute(argv, argc, ac, av) == -1)
+				{
+					free(lineptr);
+					free(argv);
+					exit(2);
+				}
 		}
 		else
 		{
