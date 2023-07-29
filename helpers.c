@@ -35,24 +35,19 @@ int _strncmp(const char *s1, const char *s2, size_t n)
  * @argc: number of arguments
  * Return: Nothing
  */
-void _cd(const char *path, int argc)
+int _cd(char *path, int argc)
 {
 	char *home_path = getenv("HOME");
 	char current_directory[1024];
 	int previous, cd_i;
 	char *cwd;
 
-	/*cd with no arguments changes dir to home/root dir*/
 	if (argc == 1)
 	{
 		chdir(home_path);
 	}
 	if (path != NULL)
 	{
-		/**
-		 * checks if command cd with argument '-',
-		 * then handles it by changing to the previous dir
-		 */
 		if (_strcmp(path, "-") == 0)
 		{
 			previous = chdir(getenv("OLDPWD"));
@@ -61,7 +56,7 @@ void _cd(const char *path, int argc)
 				perror("chdir");
 			}
 		}
-		else /*change directory using path*/
+		else
 		{
 			cd_i = chdir(path);
 			if (cd_i == -1)
@@ -75,6 +70,7 @@ void _cd(const char *path, int argc)
 	{
 		setenv("PWD", current_directory, 1);
 	}
+	return (0);
 }
 
 /**

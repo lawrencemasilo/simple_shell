@@ -22,7 +22,7 @@ char *_strchr(char *s, char c);
 char *_strtok(char *str, char *delim);
 int _atoi(const char *str);
 int _strncmp(const char *s1, const char *s2, size_t n);
-void _cd(const char *path, int argc);
+int _cd(char *path, int argc);
 int _strcmp(const char *str1, const char *str2);
 void _doublefree(char **str);
 int _exit_builtin(char *lineptr);

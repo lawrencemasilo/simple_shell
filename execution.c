@@ -107,8 +107,11 @@ int _execute_builtin(char **argv, int size)
 {
 	if (_strcmp(argv[0], "cd") == 0)
 	{
-		_cd(argv[1], size);
-			return (1);
+		if ((_cd(argv[1], size)) == 0)
+		{
+			free(argv);
+		}
+		return (1);
 	}
 	return (0);
 }
